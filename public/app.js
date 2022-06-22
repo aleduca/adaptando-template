@@ -2482,6 +2482,8 @@ const quantity_in_details = document.querySelector('#quantity-in-details');
 const remove_from_cart = document.querySelectorAll('.remove');
 const plus = document.querySelectorAll('.plus');
 const minus = document.querySelectorAll('.minus');
+const amount_total_cart = document.querySelectorAll('.amount_total_cart');
+console.log(amount_total_cart);
 
 function totalProducts(data) {
   let total = 0;
@@ -2501,6 +2503,12 @@ function totalProducts(data) {
 
   if (quantity_in_details) {
     quantity_in_details.textContent = 'Total in cart: ' + (0,_services_currency__WEBPACK_IMPORTED_MODULE_1__["default"])(total);
+  }
+
+  if (amount_total_cart) {
+    amount_total_cart.forEach(element => {
+      element.textContent = (0,_services_currency__WEBPACK_IMPORTED_MODULE_1__["default"])(total);
+    });
   }
 }
 

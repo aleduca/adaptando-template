@@ -163,7 +163,8 @@
                                 <tbody>
                                     <tr class="cart-subtotal">
                                         <th>Cart Subtotal</th>
-                                        <td><span class="amount">R$ <?php echo number_format($total, 2, ',', '.') ?></span></td>
+                                        <!-- <td><span class="amount">R$ <?php echo number_format($total, 2, ',', '.') ?></span></td> -->
+                                        <td><span class="amount amount_total_cart"></span></td>
                                     </tr>
 
                                     <tr class="shipping">
@@ -173,7 +174,8 @@
 
                                     <tr class="order-total">
                                         <th>Order Total</th>
-                                        <td><strong><span class="amount">R$ <?php echo number_format($total, 2, ',', '.') ?></span></strong> </td>
+                                        <td><strong><span class="amount amount_total_cart"></span></strong> </td>
+                                        <!-- <td><strong><span class="amount">R$ <?php echo number_format($total, 2, ',', '.') ?></span></strong> </td> -->
                                     </tr>
                                 </tbody>
                             </table>
