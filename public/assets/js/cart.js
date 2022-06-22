@@ -3,6 +3,11 @@ import currency from './services/currency';
 const btns_add_to_cart = document.querySelectorAll('.add-to-cart-link');
 const cart_amount = document.querySelector('.cart-amunt');
 const product_count = document.querySelector('.product-count');
+const qty = document.querySelector('.qty');
+const quantity_in_details = document.querySelector('#quantity-in-details');
+const remove_from_cart = document.querySelectorAll('.remove');
+const plus = document.querySelectorAll('.plus');
+const minus = document.querySelectorAll('.minus');
 
 function totalProducts(data){
   let total = 0;
@@ -17,9 +22,13 @@ function totalProducts(data){
   }
 
   if(cart_amount){
-    console.log(total);
-    cart_amount.textContent = total === 0 ? currency(0) : currency(total);
+    cart_amount.textContent = currency(total);
   }
+
+  if(quantity_in_details){
+    quantity_in_details.textContent = 'Total in cart: '+currency(total);
+  }
+
 }
 
 btns_add_to_cart.forEach(btn => {
@@ -27,7 +36,11 @@ btns_add_to_cart.forEach(btn => {
     try {
       event.preventDefault();
       const id = +btn.getAttribute('data-id');
-      const {data} = await http.post('?inc=add-to-cart', {id});
+      let quantity = 1;
+      if(qty){
+        quantity = +qty.value;
+      }
+      const {data} = await http.post('?inc=add-to-cart', {id, quantity});
       totalProducts(data);
     } catch (error) {
       console.log(error);
@@ -45,3 +58,56 @@ async function getProducts(){
 }
 
 getProducts();
+
+remove_from_cart.forEach(btn_remove => {
+  btn_remove.addEventListener('click', async (event) => {
+    event.preventDefault();
+    const id = btn_remove.dataset.id;
+
+    await http.get('?inc=cart-remove', {
+      params:{
+        id
+      }
+    });
+
+    window.location.reload();
+  });
+});
+
+plus.forEach(btn_plus => {
+  btn_plus.addEventListener('click', async (event) => {
+    try {
+      event.preventDefault();
+      const id = btn_plus.dataset.id;
+      const qtyProduct = document.querySelector('#qty'+id);
+      qtyProduct.value++;
+      await http.post('?inc=add-to-cart', {id, quantity:+qtyProduct.value, qtyTotal:true});
+      window.location.reload();
+    } catch (error) {
+      console.log(error)  ;
+    }    
+  });
+});
+
+
+minus.forEach(btn_minus => {
+  btn_minus.addEventListener('click', async(event) => {
+    try {
+      event.preventDefault();
+      const id = btn_minus.dataset.id;
+      const qtyProduct = document.querySelector('#qty'+id);
+      const valueInput = Number(qtyProduct.value) - 1;
+      if(valueInput < 0){
+        alert('Error');
+        return;
+      }
+      qtyProduct.value = valueInput;
+
+      await http.post('?inc=add-to-cart', {id, quantity:+qtyProduct.value, qtyTotal:true});
+      window.location.reload();
+    } catch (error) {
+      console.log(error);  
+    }
+
+  });
+});
